@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteraryLoom | Honest Book Reviews & Community</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-[#FAF7F2] text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-amber-900 text-amber-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-amber-400 text-xl"></i>
+        <span id="toast-msg" class="font-medium">Action successful!</span>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-amber-900/10 transition-all duration-200" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-amber-900 flex items-center justify-center text-amber-100 shadow-md group-hover:bg-amber-800 transition">
+                    <i class="fa-solid fa-book-open text-xl"></i>
+                </div>
+                <span class="font-serif text-2xl font-bold tracking-tight text-amber-950">Literary<span class="text-amber-700 font-sans font-light">Loom</span></span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600">
+                <a href="#explore" class="hover:text-amber-900 transition">Explore Reviews</a>
+                <a href="#matchmaker" class="hover:text-amber-900 transition flex items-center gap-1.5 text-amber-800 font-semibold">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i> Matchmaker
+                </a>
+                <a href="#trending" class="hover:text-amber-900 transition">Trending</a>
+                <a href="#community" class="hover:text-amber-900 transition">Community</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden sm:flex items-center gap-4">
+                <button onclick="toggleWriteModal(true)" class="bg-amber-900 hover:bg-amber-800 text-amber-50 px-5 py-2.5 rounded-xl font-medium shadow-sm hover:shadow-md transition flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-pen-nib text-sm"></i>
+                    Write Review
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-slate-700 hover:text-amber-900 text-2xl focus:outline-none">
+                <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#FAF7F2] border-b border-amber-900/10 px-6 py-6 space-y-4 shadow-lg">
+            <a href="#explore" onclick="toggleMobileMenu()" class="block font-medium text-slate-700 hover:text-amber-900">Explore Reviews</a>
+            <a href="#matchmaker" onclick="toggleMobileMenu()" class="block font-medium text-amber-800 flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i> Book Matchmaker
+            </a>
+            <a href="#trending" onclick="toggleMobileMenu()" class="block font-medium text-slate-700 hover:text-amber-900">Trending Books</a>
+            <a href="#community" onclick="toggleMobileMenu()" class="block font-medium text-slate-700 hover:text-amber-900">Community</a>
+            <div class="pt-2">
+                <button onclick="toggleMobileMenu(); toggleWriteModal(true);" class="w-full bg-amber-900 text-amber-50 px-5 py-3 rounded-xl font-medium shadow flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-pen-nib"></i> Write Review
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-12 pb-20 md:py-28 bg-gradient-to-b from-[#FAF7F2] via-[#F3EDE2] to-[#FAF7F2]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-amber-900/10 border border-amber-900/20 px-4 py-1.5 rounded-full text-amber-900 text-sm font-semibold mx-auto lg:mx-0">
+                        <i class="fa-solid fa-star text-amber-600"></i>
+                        <span>Voted #1 Book Community of 2026</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+                        Discover your next <span class="italic text-amber-900">unputdownable</span> read.
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Deep dive into honest, insightful reviews from fellow bookworms. Explore curated ratings, pros & cons, and find the stories that will captivate your imagination.
+                    </p>
+
+                    <!-- Search Bar -->
+                    <div class="max-w-xl mx-auto lg:mx-0 pt-2">
+                        <div class="relative flex items-center shadow-xl rounded-2xl bg-white border border-amber-900/10 p-2 focus-within:ring-2 focus-within:ring-amber-800 transition">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400 pl-4 text-lg"></i>
+                            <input type="text" id="hero-search" oninput="handleSearch(this.value)" placeholder="Search by title, author, or keyword (e.g. Dune)..." class="w-full py-3 px-4 outline-none text-slate-800 placeholder-slate-400 bg-transparent text-base">
+                            <button onclick="scrollToExplore()" class="bg-amber-900 hover:bg-amber-800 text-white px-6 py-3 rounded-xl font-medium transition whitespace-nowrap shadow-sm cursor-pointer">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-6 border-t border-amber-900/10 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <div class="font-serif text-3xl font-bold text-amber-950">12K+</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium">In-Depth Reviews</div>
+                        </div>
+                        <div>
+                            <div class="font-serif text-3xl font-bold text-amber-950">4.8★</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium">Average Rating</div>
+                        </div>
+                        <div>
+                            <div class="font-serif text-3xl font-bold text-amber-950">85K</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium">Active Readers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image / Visual Collage -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute -top-10 -left-10 w-72 h-72 bg-amber-200/50 rounded-full blur-3xl -z-10"></div>
+                        <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-amber-700/20 rounded-full blur-3xl -z-10"></div>
+                        <div class="relative bg-white p-4 rounded-3xl shadow-2xl border border-amber-900/10 rotate-1 transform hover:rotate-0 transition duration-500">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=1000" alt="Cozy reading aesthetic" class="rounded-2xl w-full h-[400px] object-cover shadow-inner">
+                            <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 max-w-[240px]">
+                                <div class="bg-amber-100 p-3 rounded-xl text-amber-900">
+                                    <i class="fa-solid fa-quote-left text-xl"></i>
+                                </div>
+                                <div class="text-xs text-slate-600 font-medium italic">
+                                    "This site helped me find my favorite book of the decade!"
+                                    <span class="block font-bold text-slate-900 font-sans not-italic mt-1">— Clara M.</span>
+                                </div>
+                            </div>
+                            <div class="absolute -top-4 -right-4 bg-amber-900 text-white px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 font-semibold text-sm">
+                                <i class="fa-solid fa-fire text-amber-400"></i> Trending Now
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive AI Book Matchmaker -->
+    <section id="matchmaker" class="py-16 bg-[#EDE5D8] border-y border-amber-900/10 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-amber-900/10">
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="text-amber-800 font-semibold text-sm uppercase tracking-widest flex items-center justify-center gap-2 mb-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Recommendation Assistant
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Book Matchmaker Quiz</h2>
+                    <p class="text-slate-600 text-base md:text-lg">Can't decide what to read next? Answer three quick questions and let our algorithm match you with your perfect literary escape.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    <!-- Step 1: Mood -->
+                    <div class="bg-[#FAF7F2] p-6 rounded-2xl border border-amber-900/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="w-8 h-8 rounded-full bg-amber-900 text-white flex items-center justify-center font-bold text-sm">1</span>
+                                <h3 class="font-serif font-bold text-lg text-slate-900">Your Current Mood</h3>
+                            </div>
+                            <div class="space-y-3" id="quiz-mood-options">
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Mind-bending & Thrilling</span>
+                                    <input type="radio" name="quiz_mood" value="thrilling" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Reflective & Inspiring</span>
+                                    <input type="radio" name="quiz_mood" value="inspiring" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Cozy & Heartwarming</span>
+                                    <input type="radio" name="quiz_mood" value="cozy" class="accent-amber-900">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Preferred Genre -->
+                    <div class="bg-[#FAF7F2] p-6 rounded-2xl border border-amber-900/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="w-8 h-8 rounded-full bg-amber-900 text-white flex items-center justify-center font-bold text-sm">2</span>
+                                <h3 class="font-serif font-bold text-lg text-slate-900">Favorite Universe</h3>
+                            </div>
+                            <div class="space-y-3" id="quiz-genre-options">
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Sci-Fi & Fantasy</span>
+                                    <input type="radio" name="quiz_genre" value="Sci-Fi" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Realism & Drama</span>
+                                    <input type="radio" name="quiz_genre" value="Fiction" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Self-Growth & Facts</span>
+                                    <input type="radio" name="quiz_genre" value="Non-Fiction" class="accent-amber-900">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Length -->
+                    <div class="bg-[#FAF7F2] p-6 rounded-2xl border border-amber-900/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="w-8 h-8 rounded-full bg-amber-900 text-white flex items-center justify-center font-bold text-sm">3</span>
+                                <h3 class="font-serif font-bold text-lg text-slate-900">Reading Commitment</h3>
+                            </div>
+                            <div class="space-y-3" id="quiz-length-options">
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Breezy (< 300 pages)</span>
+                                    <input type="radio" name="quiz_length" value="short" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Standard (300-500 pages)</span>
+                                    <input type="radio" name="quiz_length" value="medium" class="accent-amber-900">
+                                </label>
+                                <label class="quiz-option block p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-900 cursor-pointer transition flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">Epic Tome (500+ pages)</span>
+                                    <input type="radio" name="quiz_length" value="long" class="accent-amber-900">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="calculateMatch()" class="bg-amber-900 hover:bg-amber-800 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer inline-flex items-center gap-3">
+                        <i class="fa-solid fa-sparkles"></i> Find My Perfect Book Match
+                    </button>
+                </div>
+
+                <!-- Matchmaker Result Container -->
+                <div id="quiz-result" class="hidden mt-10 pt-8 border-t border-amber-900/10 transition-all duration-500">
+                    <div class="bg-amber-50 border border-amber-900/20 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8">
+                        <img id="match-cover" src="" alt="Matched Book" class="w-40 h-60 object-cover rounded-xl shadow-lg flex-shrink-0">
+                        <div class="space-y-3 text-center md:text-left flex-1">
+                            <div class="inline-flex items-center gap-2 bg-amber-900/10 text-amber-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                                <i class="fa-solid fa-check text-amber-700"></i> Best Match Found
+                            </div>
+                            <h3 id="match-title" class="text-2xl md:text-3xl font-serif font-bold text-slate-900"></h3>
+                            <p id="match-author" class="text-amber-800 font-semibold"></p>
+                            <p id="match-snippet" class="text-slate-600 text-sm md:text-base leading-relaxed"></p>
+                            <div class="pt-3">
+                                <button onclick="openReviewModalFromMatch()" class="bg-amber-900 hover:bg-amber-800 text-white px-6 py-2.5 rounded-xl font-medium shadow transition inline-flex items-center gap-2 cursor-pointer">
+                                    <span>Read Full Review</span>
+                                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Section: Explore Reviews -->
+    <section id="explore" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <span class="text-amber-800 font-semibold text-sm uppercase tracking-widest block mb-2">Curated Collection</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Explore Book Reviews</h2>
+            </div>
+
+            <!-- Category / Genre Filters -->
+            <div class="flex flex-wrap items-center gap-2" id="genre-filters">
+                <button onclick="filterCategory('All')" class="genre-btn active bg-amber-900 text-white px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer shadow-sm">All Genres</button>
+                <button onclick="filterCategory('Fiction')" class="genre-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer">Fiction</button>
+                <button onclick="filterCategory('Sci-Fi')" class="genre-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer">Sci-Fi</button>
+                <button onclick="filterCategory('Non-Fiction')" class="genre-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer">Non-Fiction</button>
+                <button onclick="filterCategory('Mystery')" class="genre-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer">Mystery</button>
+            </div>
+        </div>
+
+        <!-- Search Status Indicator -->
+        <div id="search-indicator" class="hidden mb-8 text-slate-600 font-medium flex items-center justify-between bg-amber-50 border border-amber-200 px-5 py-3 rounded-xl">
+            <span>Showing results for: "<span id="search-query-display" class="font-bold text-amber-950"></span>"</span>
+            <button onclick="clearSearch()" class="text-amber-900 hover:underline font-bold text-sm">Clear Search</button>
+        </div>
+
+        <!-- Book Reviews Grid -->
+        <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden py-20 text-center max-w-md mx-auto space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+            <h3 class="text-2xl font-serif font-bold text-slate-900">No books found</h3>
+            <p class="text-slate-600">We couldn't find any reviews matching your criteria. Be the first to write a review for this book!</p>
+            <button onclick="toggleWriteModal(true)" class="bg-amber-900 text-white px-6 py-2.5 rounded-xl font-medium shadow inline-block mt-2">
+                Write a Review
+            </button>
+        </div>
+    </section>
+
+    <!-- Trending & Editor's Picks Section -->
+    <section id="trending" class="py-16 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-amber-400 font-semibold text-sm uppercase tracking-widest block mb-2">Community Favorites</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold">Trending & Highest Rated</h2>
+                </div>
+                <p class="text-slate-400 max-w-md text-sm md:text-base">The books that our community members have been obsessing over this month with pristine 5-star ratings.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Trending Card 1 -->
+                <div class="bg-slate-800/80 border border-slate-700/50 rounded-2xl p-6 flex gap-6 items-start hover:border-amber-500/50 transition group">
+                    <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600" alt="The Midnight Library" class="w-24 h-36 object-cover rounded-lg shadow-md group-hover:scale-105 transition duration-300 flex-shrink-0">
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center text-amber-400 text-xs font-bold gap-1">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span class="text-slate-400 ml-1">(5.0)</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-lg leading-tight text-white group-hover:text-amber-300 transition">The Midnight Library</h3>
+                        <p class="text-xs text-amber-400 font-medium">Matt Haig</p>
+                        <p class="text-xs text-slate-400 line-clamp-3 pt-1">"Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life..."</p>
+                        <button onclick="openReviewById(1)" class="text-xs text-amber-400 font-semibold hover:underline inline-flex items-center gap-1 pt-2 cursor-pointer">
+                            <span>Read Review</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trending Card 2 -->
+                <div class="bg-slate-800/80 border border-slate-700/50 rounded-2xl p-6 flex gap-6 items-start hover:border-amber-500/50 transition group">
+                    <img src="https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a?auto=format&fit=crop&q=80&w=600" alt="Dune" class="w-24 h-36 object-cover rounded-lg shadow-md group-hover:scale-105 transition duration-300 flex-shrink-0">
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center text-amber-400 text-xs font-bold gap-1">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                            <span class="text-slate-400 ml-1">(4.8)</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-lg leading-tight text-white group-hover:text-amber-300 transition">Dune</h3>
+                        <p class="text-xs text-amber-400 font-medium">Frank Herbert</p>
+                        <p class="text-xs text-slate-400 line-clamp-3 pt-1">"A masterpiece of worldbuilding. Dune weaves ecology, religion, and politics into an unforgettable sci-fi epic across the desert sands of Arrakis."</p>
+                        <button onclick="openReviewById(2)" class="text-xs text-amber-400 font-semibold hover:underline inline-flex items-center gap-1 pt-2 cursor-pointer">
+                            <span>Read Review</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trending Card 3 -->
+                <div class="bg-slate-800/80 border border-slate-700/50 rounded-2xl p-6 flex gap-6 items-start hover:border-amber-500/50 transition group">
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600" alt="Project Hail Mary" class="w-24 h-36 object-cover rounded-lg shadow-md group-hover:scale-105 transition duration-300 flex-shrink-0">
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center text-amber-400 text-xs font-bold gap-1">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span class="text-slate-400 ml-1">(5.0)</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-lg leading-tight text-white group-hover:text-amber-300 transition">Project Hail Mary</h3>
+                        <p class="text-xs text-amber-400 font-medium">Andy Weir</p>
+                        <p class="text-xs text-slate-400 line-clamp-3 pt-1">"An astronaut wakes up with amnesia on a starship. It is absolute scientific problem-solving gold combined with the purest friendship in sci-fi."</p>
+                        <button onclick="openReviewById(4)" class="text-xs text-amber-400 font-semibold hover:underline inline-flex items-center gap-1 pt-2 cursor-pointer">
+                            <span>Read Review</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Reviewers & Community Buzz -->
+    <section id="community" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Left Column: Community Activity Feed -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="flex items-center justify-between border-b border-amber-900/10 pb-4">
+                    <div>
+                        <span class="text-amber-800 font-semibold text-sm uppercase tracking-widest block">Live Feed</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 font-serif">Community Discussions</h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Active Now
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Feed Item 1 -->
+                    <div class="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm flex gap-4 items-start">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Avatar" class="w-12 h-12 rounded-full object-cover shadow-sm flex-shrink-0">
+                        <div class="space-y-1 flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-900 text-sm sm:text-base">Sophia Vance</span>
+                                <span class="text-xs text-slate-400">10 mins ago</span>
+                            </div>
+                            <p class="text-xs font-medium text-amber-800">Reviewing: <span class="underline">Tomorrow, and Tomorrow, and Tomorrow</span></p>
+                            <p class="text-sm text-slate-600 pt-1">"I just finished this and I'm sobbing. The depiction of creative partnerships and video game design is beautifully intertwined. Highly recommend!"</p>
+                            <div class="flex items-center gap-4 pt-2 text-xs text-slate-500">
+                                <button onclick="triggerToast('Liked review!')" class="hover:text-amber-900 flex items-center gap-1 cursor-pointer"><i class="fa-regular fa-heart"></i> 24 Likes</button>
+                                <button onclick="openReviewById(6)" class="hover:text-amber-900 flex items-center gap-1 cursor-pointer"><i class="fa-regular fa-comment"></i> Join Discussion</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feed Item 2 -->
+                    <div class="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm flex gap-4 items-start">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Avatar" class="w-12 h-12 rounded-full object-cover shadow-sm flex-shrink-0">
+                        <div class="space-y-1 flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-900 text-sm sm:text-base">Marcus Thorne</span>
+                                <span class="text-xs text-slate-400">2 hours ago</span>
+                            </div>
+                            <p class="text-xs font-medium text-amber-800">Reviewing: <span class="underline">Atomic Habits</span></p>
+                            <p class="text-sm text-slate-600 pt-1">"The 1% rule changed my routine completely. Clear's writing is incredibly actionable without the typical fluff found in self-help literature."</p>
+                            <div class="flex items-center gap-4 pt-2 text-xs text-slate-500">
+                                <button onclick="triggerToast('Liked review!')" class="hover:text-amber-900 flex items-center gap-1 cursor-pointer"><i class="fa-regular fa-heart"></i> 41 Likes</button>
+                                <button onclick="openReviewById(3)" class="hover:text-amber-900 flex items-center gap-1 cursor-pointer"><i class="fa-regular fa-comment"></i> Join Discussion</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Top Reviewers -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="border-b border-amber-900/10 pb-4">
+                    <span class="text-amber-800 font-semibold text-sm uppercase tracking-widest block">Leaderboard</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 font-serif">Top Reviewers</h2>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-amber-900/10 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-900 text-lg shadow-inner">1</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Elena Rostova</h4>
+                                <p class="text-xs text-slate-500">142 Reviews written</p>
+                            </div>
+                        </div>
+                        <span class="bg-amber-900 text-white text-xs px-2.5 py-1 rounded-lg font-bold">Elite</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-lg shadow-inner">2</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">David K.</h4>
+                                <p class="text-xs text-slate-500">98 Reviews written</p>
+                            </div>
+                        </div>
+                        <span class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-lg font-bold">Expert</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center font-bold text-amber-800 text-lg shadow-inner">3</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Sarah Jenkins</h4>
+                                <p class="text-xs text-slate-500">76 Reviews written</p>
+                            </div>
+                        </div>
+                        <span class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-lg font-bold">Avid</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 text-center">
+                        <button onclick="toggleWriteModal(true)" class="w-full bg-amber-900/10 hover:bg-amber-900/20 text-amber-950 font-semibold py-3 rounded-xl transition text-sm cursor-pointer">
+                            Start Reviewing Today
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup Section -->
+    <section class="py-16 bg-amber-900 text-amber-50 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
+            <i class="fa-solid fa-envelope-open-text text-5xl text-amber-400"></i>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-white tracking-tight">Never miss a great book.</h2>
+            <p class="text-amber-200 text-lg max-w-xl mx-auto">Subscribe to our weekly digest. We send out top 5 honest book reviews and new upcoming releases every Sunday morning.</p>
+            <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-4">
+                <input type="email" required placeholder="Enter your email address..." class="flex-1 px-5 py-3.5 rounded-xl text-slate-900 bg-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-amber-400 font-medium">
+                <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-7 py-3.5 rounded-xl shadow transition cursor-pointer">
+                    Subscribe
+                </button>
+            </form>
+            <p class="text-xs text-amber-300/80">No spam ever. Unsubscribe in one click.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="space-y-4 md:col-span-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-amber-900 flex items-center justify-center text-amber-100 shadow">
+                            <i class="fa-solid fa-book-open text-base"></i>
+                        </div>
+                        <span class="font-serif text-xl font-bold text-white tracking-tight">Literary<span class="text-amber-600 font-sans font-light">Loom</span></span>
+                    </div>
+                    <p class="text-sm max-w-sm leading-relaxed">
+                        A vibrant community of book enthusiasts dedicated to sharing thorough, genuine reviews. Discover your next favorite story with us.
+                    </p>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider">Navigation</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#explore" class="hover:text-white transition">Explore Reviews</a></li>
+                        <li><a href="#matchmaker" class="hover:text-white transition">Book Matchmaker</a></li>
+                        <li><a href="#trending" class="hover:text-white transition">Trending Books</a></li>
+                        <li><a href="#community" class="hover:text-white transition">Community Feed</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider">Stay Connected</h4>
+                    <div class="flex gap-4 text-xl text-slate-300">
+                        <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-goodreads"></i></a>
+                        <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                    <p class="text-xs text-slate-500 pt-2">© 2026 LiteraryLoom Inc. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- MODAL: Full Book Review View -->
+    <div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4 sm:p-6 overflow-y-auto">
+        <!-- Backdrop -->
+        <div onclick="toggleReviewModal(false)" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 z-10 flex flex-col">
+            <div class="sticky top-0 bg-white/95 backdrop-blur px-6 py-4 border-b border-slate-100 flex items-center justify-between z-20">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-900 bg-amber-50 px-3 py-1 rounded-full" id="modal-genre">Genre</span>
+                <button onclick="toggleReviewModal(false)" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 sm:p-10 grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Left: Book Cover & Quick Stats -->
+                <div class="md:col-span-4 space-y-6 text-center md:text-left">
+                    <img id="modal-cover" src="" alt="Book Cover" class="w-48 h-72 md:w-full md:h-auto object-cover rounded-2xl shadow-xl mx-auto">
+                    
+                    <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-900/10 space-y-3">
+                        <div>
+                            <span class="text-xs text-slate-500 uppercase font-bold block">Rating</span>
+                            <div class="flex items-center justify-center md:justify-start text-amber-500 text-lg font-bold gap-1 mt-0.5" id="modal-stars">
+                            </div>
+                        </div>
+                        <div class="border-t border-amber-900/10 pt-2">
+                            <span class="text-xs text-slate-500 uppercase font-bold block">Reviewer</span>
+                            <div class="flex items-center justify-center md:justify-start gap-2 mt-1">
+                                <img id="modal-reviewer-avatar" src="" alt="Avatar" class="w-7 h-7 rounded-full object-cover">
+                                <span id="modal-reviewer-name" class="font-bold text-slate-800 text-sm"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Detailed Review Content -->
+                <div class="md:col-span-8 space-y-6">
+                    <div>
+                        <h2 id="modal-title" class="text-3xl sm:text-4xl font-serif font-bold text-slate-900"></h2>
+                        <p id="modal-author" class="text-lg font-semibold text-amber-800 mt-1"></p>
+                    </div>
+
+                    <div class="prose max-w-none text-slate-700 space-y-4 leading-relaxed text-base" id="modal-review-body">
+                    </div>
+
+                    <!-- Pros & Cons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl space-y-2">
+                            <span class="font-bold text-emerald-900 flex items-center gap-2 text-sm">
+                                <i class="fa-solid fa-circle-plus text-emerald-600"></i> What We Loved
+                            </span>
+                            <p id="modal-pros" class="text-xs text-emerald-800 leading-normal"></p>
+                        </div>
+                        <div class="bg-rose-50 border border-rose-200 p-4 rounded-2xl space-y-2">
+                            <span class="font-bold text-rose-900 flex items-center gap-2 text-sm">
+                                <i class="fa-solid fa-circle-minus text-rose-600"></i> Things to Note
+                            </span>
+                            <p id="modal-cons" class="text-xs text-rose-800 leading-normal"></p>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="pt-8 border-t border-slate-200 space-y-6">
+                        <h3 class="font-serif font-bold text-2xl text-slate-900">Community Discussion</h3>
+                        
+                        <!-- Add Comment Form -->
+                        <div class="flex gap-3">
+                            <input type="text" id="new-comment-text" placeholder="Add your thought on this book..." class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-900 text-sm">
+                            <button onclick="addComment()" class="bg-amber-900 hover:bg-amber-800 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition cursor-pointer">Post</button>
+                        </div>
+
+                        <!-- Comments List -->
+                        <div id="modal-comments-list" class="space-y-4 max-h-60 overflow-y-auto pr-2">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL: Write a Review -->
+    <div id="write-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4 sm:p-6 overflow-y-auto">
+        <!-- Backdrop -->
+        <div onclick="toggleWriteModal(false)" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-100 z-10 p-6 sm:p-10 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2 text-amber-900 font-serif font-bold text-2xl">
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <span>Publish Your Review</span>
+                </div>
+                <button onclick="toggleWriteModal(false)" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleReviewSubmit(event)" class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Book Title *</label>
+                        <input type="text" id="write-title" required placeholder="e.g. The Hobbit" class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-amber-900 font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Author *</label>
+                        <input type="text" id="write-author" required placeholder="e.g. J.R.R. Tolkien" class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-amber-900 font-medium">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Genre *</label>
+                        <select id="write-genre" required class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-amber-900 font-medium bg-white">
+                            <option value="Fiction">Fiction</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Mystery">Mystery</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Star Rating (1-5) *</label>
+                        <select id="write-rating" required class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-amber-900 font-medium bg-white">
+                            <option value="5">5 ★★★★★ - Absolute Masterpiece</option>
+                            <option value="4.5">4.5 ★★★★½ - Incredible Read</option>
+                            <option value="4">4 ★★★★☆ - Highly Recommend</option>
+                            <option value="3.5">3.5 ★★★½ - Good, has flaws</option>
+                            <option value="3">3 ★★★☆☆ - Average</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Book Cover Image URL (Optional)</label>
+                    <input type="url" id="write-cover" placeholder="https://images.unsplash.com/..." class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-amber-900 text-sm">
+                    <span class="text-xs text-slate-400 mt-1 block">Leave empty to use a beautiful default book cover placeholder.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Your Full Review *</label>
+                    <textarea id="write-review" rows="4" required placeholder="What made this book stand out? How were the character arcs, worldbuilding, or arguments?" class="w-full border border-slate-200 rounded-xl p-4 outline-none focus:border-amber-900 font-medium"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">What We Loved (Pros)</label>
+                        <input type="text" id="write-pros" placeholder="e.g. Flawless pacing, lovable protagonists" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-900 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Things to Note (Cons)</label>
+                        <input type="text" id="write-cons" placeholder="e.g. Slow start in chapter 1" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-900 text-sm">
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-5 flex justify-end gap-3">
+                    <button type="button" onclick="toggleWriteModal(false)" class="border border-slate-200 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-medium transition cursor-pointer">Cancel</button>
+                    <button type="submit" class="bg-amber-900 hover:bg-amber-800 text-white px-7 py-3 rounded-xl font-semibold shadow transition cursor-pointer">Publish Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JavaScript / Logic -->
+    <script>
+        // Mock Data for Books & Reviews
+        let books = [
+            {
+                id: 1,
+                title: "The Midnight Library",
+                author: "Matt Haig",
+                genre: "Fiction",
+                rating: 5.0,
+                cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Elena Rostova",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+                snippet: "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life...",
+                fullReview: "The Midnight Library explores the endless possibilities of what could have been. Nora Seed finds herself in a magical library where each book represents a parallel universe where she made a different choice. Matt Haig masterfully crafts an emotional meditation on regret, mental health, and the sheer joy of living. It is a profoundly comforting read that stays with you long after the final page.",
+                pros: "Uplifting philosophical premise, accessible prose, deep emotional resonance.",
+                cons: "Can feel slightly repetitive in the middle chapters.",
+                comments: [
+                    { name: "David K.", text: "This book helped me through a tough time!", time: "2 days ago" },
+                    { name: "Sarah Jenkins", text: "Beautifully written. Five stars!", time: "1 day ago" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Dune",
+                author: "Frank Herbert",
+                genre: "Sci-Fi",
+                rating: 4.8,
+                cover: "https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Marcus Thorne",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+                snippet: "A masterpiece of worldbuilding. Dune weaves ecology, religion, and politics into an unforgettable sci-fi epic across the desert sands of Arrakis.",
+                fullReview: "Frank Herbert's seminal masterwork is unparalleled in scale and ambition. Following young Paul Atreides as his family assumes stewardship of the treacherous desert planet Arrakis, the novel seamlessly weaves ecological themes with geopolitical intrigue and mystical prophecies. The worldbuilding is dense and rewarding.",
+                pros: "Legendary worldbuilding, intricate political intrigue, timeless ecological message.",
+                cons: "Steep learning curve with terminology in the first 100 pages.",
+                comments: [
+                    { name: "Alex R.", text: "The spice must flow! Incredible depth.", time: "3 days ago" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Atomic Habits",
+                author: "James Clear",
+                genre: "Non-Fiction",
+                rating: 4.9,
+                cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Sarah Jenkins",
+                avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200",
+                snippet: "The 1% rule changed my routine completely. Clear's writing is incredibly actionable without the typical fluff found in self-help literature.",
+                fullReview: "If you want to change your habits, this is the definitive playbook. James Clear breaks down habit formation into four simple laws: Make it Obvious, Make it Attractive, Make it Easy, and Make it Satisfying. Filled with practical examples and scientific backing, it provides an immediate roadmap for self-improvement.",
+                pros: "Highly actionable, zero fluff, easy to digest frameworks.",
+                cons: "Familiar concepts if you've read Charles Duhigg.",
+                comments: [
+                    { name: "Elena Rostova", text: "I recommend this to every single client I coach.", time: "4 hours ago" }
+                ]
+            },
+            {
+                id: 4,
+                title: "Project Hail Mary",
+                author: "Andy Weir",
+                genre: "Sci-Fi",
+                rating: 5.0,
+                cover: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600",
+                reviewer: "David K.",
+                avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+                snippet: "An astronaut wakes up with amnesia on a starship. It is absolute scientific problem-solving gold combined with the purest friendship in sci-fi.",
+                fullReview: "Ryland Grace is the sole survivor on a desperate, last-chance mission to save Earth from an extinction-level solar anomaly. Weir brings back the infectious competence and problem-solving charm of The Martian, but elevates it with a heartwarming alien encounter that redefines interstellar camaraderie.",
+                pros: "Spectacular hard sci-fi science, amazing pacing, unforgettable alien companion.",
+                cons: "Main character voice is very similar to Mark Watney.",
+                comments: []
+            },
+            {
+                id: 5,
+                title: "The Silent Patient",
+                author: "Alex Michaelides",
+                genre: "Mystery",
+                rating: 4.6,
+                cover: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Claire Montgomery",
+                avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200",
+                snippet: "Alicia Berenson shoots her husband five times in the face and never speaks another word. A psychological thriller with a jaw-dropping twist.",
+                fullReview: "A famous painter shoots her fashion photographer husband and enters a state of absolute mutism. Theo Faber, a criminal psychotherapist, becomes obsessed with uncovering her motive. The psychological tension ratchets up chapter by chapter, culminating in one of the most brilliant twist endings in modern thriller history.",
+                pros: "Stellar psychological suspense, fast-paced chapters, unforgettable climax.",
+                cons: "Some secondary characters feel slightly underdeveloped.",
+                comments: [
+                    { name: "Sophia Vance", text: "That twist literally made me drop the book!", time: "5 days ago" }
+                ]
+            },
+            {
+                id: 6,
+                title: "Tomorrow, and Tomorrow, and Tomorrow",
+                author: "Gabrielle Zevin",
+                genre: "Fiction",
+                rating: 4.8,
+                cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Sophia Vance",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+                snippet: "The depiction of creative partnerships and video game design is beautifully intertwined. A sweeping saga of love, art, and ambition.",
+                fullReview: "Spanning thirty years, this novel follows Sam and Sadie, two friends who bond over video games in a hospital gaming room and later team up to create blockbuster indie games. It is a profound exploration of platonic love, creative collaboration, disability, and the grief of growing up.",
+                pros: "Flawless character dynamics, gorgeous prose, fascinating look at game design.",
+                cons: "Pacing slows down slightly during the college years.",
+                comments: []
+            },
+            {
+                id: 7,
+                title: "Lessons in Chemistry",
+                author: "Bonnie Garmus",
+                genre: "Fiction",
+                rating: 4.7,
+                cover: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=600",
+                reviewer: "Elena Rostova",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+                snippet: "Elizabeth Zott is a brilliant 1960s chemist turned reluctant cooking show host who empowers women to challenge the status quo.",
+                fullReview: "Fierce, funny, and relentlessly charming, Lessons in Chemistry introduces Elizabeth Zott, a woman ahead of her time. When she is sidelined in her scientific laboratory, she brings her analytical rigor to daytime television cooking, teaching housewives both stoichiometry and self-worth.",
+                pros: "Witty dialogue, empowering themes, lovable dog companion.",
+                cons: "Certain plot coincidences stretch credulity.",
+                comments: []
+            },
+            {
+                id: 8,
+                title: "Sapiens: A Brief History of Humankind",
+                author: "Yuval Noah Harari",
+                genre: "Non-Fiction",
+                rating: 4.7,
+                cover: "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&q=80&w=600",
+                reviewer: "David K.",
+                avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+                snippet: "A breathtaking synthesis of human history. Harari explains how our shared myths and cognitive revolutions allowed us to conquer the planet.",
+                fullReview: "Harari takes us from the dawn of cognitive awakening to the modern technological era. By explaining money, religion, and empires as shared collective fictions, he provides an illuminating lens on why humans dominate the planet and what our future holds.",
+                pros: "Sweeping scope, fascinating macro-historical perspectives.",
+                cons: "Broad generalizations in certain anthropological chapters.",
+                comments: []
+            }
+        ];
+
+        let currentCategory = "All";
+        let searchQuery = "";
+        let currentModalBookId = null;
+
+        // Render Books
+        function renderBooks() {
+            const grid = document.getElementById("reviews-grid");
+            const emptyState = document.getElementById("empty-state");
+            const searchIndicator = document.getElementById("search-indicator");
+            const queryDisplay = document.getElementById("search-query-display");
+            
+            grid.innerHTML = "";
+
+            let filtered = books.filter(book => {
+                const matchCategory = currentCategory === "All" || book.genre === currentCategory;
+                const matchQuery = searchQuery === "" || 
+                    book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    book.genre.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCategory && matchQuery;
+            });
+
+            // Handle Search Indicator
+            if (searchQuery !== "") {
+                searchIndicator.classList.remove("hidden");
+                queryDisplay.innerText = searchQuery;
+            } else {
+                searchIndicator.classList.add("hidden");
+            }
+
+            // Handle Empty State
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+                grid.classList.add("hidden");
+            } else {
+                emptyState.classList.add("hidden");
+                grid.classList.remove("hidden");
+            }
+
+            filtered.forEach(book => {
+                const card = document.createElement("div");
+                card.className = "bg-white rounded-3xl overflow-hidden border border-amber-900/10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer";
+                card.onclick = () => openReviewById(book.id);
+
+                // Stars HTML
+                let starsHtml = "";
+                for(let i=1; i<=5; i++) {
+                    if (book.rating >= i) {
+                        starsHtml += '<i class="fa-solid fa-star"></i>';
+                    } else if (book.rating >= i - 0.5) {
+                        starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
+                    } else {
+                        starsHtml += '<i class="fa-regular fa-star"></i>';
+                    }
+                }
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden bg-slate-100 h-64 flex items-center justify-center">
+                        <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-4 left-4 bg-white/95 backdrop-blur text-amber-950 font-bold text-xs px-3 py-1 rounded-full shadow-md">
+                            ${book.genre}
+                        </span>
+                        <div class="absolute bottom-4 right-4 bg-amber-900 text-white font-bold text-xs px-2.5 py-1 rounded-xl shadow-md flex items-center gap-1">
+                            ${starsHtml}
+                            <span class="ml-0.5">${book.rating.toFixed(1)}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1 justify-between space-y-4">
+                        <div class="space-y-1">
+                            <h3 class="font-serif font-bold text-xl text-slate-900 group-hover:text-amber-900 transition leading-snug">${book.title}</h3>
+                            <p class="text-sm font-semibold text-amber-800">${book.author}</p>
+                            <p class="text-slate-600 text-sm line-clamp-3 pt-2 leading-relaxed">${book.snippet}</p>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-4 flex items-center justify-between text-xs text-slate-500">
+                            <div class="flex items-center gap-2">
+                                <img src="${book.avatar}" alt="${book.reviewer}" class="w-6 h-6 rounded-full object-cover">
+                                <span class="font-medium text-slate-700">${book.reviewer}</span>
+                            </div>
+                            <span class="font-bold text-amber-900 group-hover:translate-x-1 transition flex items-center gap-1">
+                                Read <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter Category
+        function filterCategory(category) {
+            currentCategory = category;
+            const buttons = document.querySelectorAll(".genre-btn");
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(category) || (category === 'All' && btn.innerText.includes('All'))) {
+                    btn.className = "genre-btn active bg-amber-900 text-white px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer shadow-sm";
+                } else {
+                    btn.className = "genre-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2 rounded-xl font-medium text-sm transition cursor-pointer";
+                }
+            });
+            renderBooks();
+        }
+
+        // Handle Search Input
+        function handleSearch(val) {
+            searchQuery = val;
+            renderBooks();
+        }
+
+        function clearSearch() {
+            document.getElementById("hero-search").value = "";
+            searchQuery = "";
+            renderBooks();
+        }
+
+        function scrollToExplore() {
+            document.getElementById("explore").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Toast Helper
+        function triggerToast(msg) {
+            const toast = document.getElementById("toast");
+            document.getElementById("toast-msg").innerText = msg;
+            toast.classList.remove("translate-y-20", "opacity-0");
+            setTimeout(() => {
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3000);
+        }
+
+        // Modals Toggle
+        function toggleReviewModal(show) {
+            const modal = document.getElementById("review-modal");
+            if (show) {
+                modal.classList.remove("hidden");
+                document.body.classList.add("overflow-hidden");
+            } else {
+                modal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+                currentModalBookId = null;
+            }
+        }
+
+        function toggleWriteModal(show) {
+            const modal = document.getElementById("write-modal");
+            if (show) {
+                modal.classList.remove("hidden");
+                document.body.classList.add("overflow-hidden");
+            } else {
+                modal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("mobile-menu-icon");
+            if (menu.classList.contains("hidden")) {
+                menu.classList.remove("hidden");
+                icon.className = "fa-solid fa-xmark";
+            } else {
+                menu.classList.add("hidden");
+                icon.className = "fa-solid fa-bars";
+            }
+        }
+
+        // Open specific review modal
+        function openReviewById(id) {
+            const book = books.find(b => b.id === id);
+            if (!book) return;
+            currentModalBookId = book.id;
+
+            document.getElementById("modal-genre").innerText = book.genre;
+            document.getElementById("modal-cover").src = book.cover;
+            document.getElementById("modal-title").innerText = book.title;
+            document.getElementById("modal-author").innerText = "by " + book.author;
+            document.getElementById("modal-review-body").innerHTML = `<p>${book.fullReview}</p>`;
+            document.getElementById("modal-reviewer-avatar").src = book.avatar;
+            document.getElementById("modal-reviewer-name").innerText = book.reviewer;
+            document.getElementById("modal-pros").innerText = book.pros || "A masterful piece of literature.";
+            document.getElementById("modal-cons").innerText = book.cons || "Nothing major to note.";
+
+            // Stars
+            let starsHtml = "";
+            for(let i=1; i<=5; i++) {
+                if (book.rating >= i) {
+                    starsHtml += '<i class="fa-solid fa-star"></i>';
+                } else if (book.rating >= i - 0.5) {
+                    starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
+                } else {
+                    starsHtml += '<i class="fa-regular fa-star"></i>';
+                }
+            }
+            starsHtml += `<span class="text-slate-800 font-bold ml-2 text-base">${book.rating.toFixed(1)} / 5.0</span>`;
+            document.getElementById("modal-stars").innerHTML = starsHtml;
+
+            renderComments();
+            toggleReviewModal(true);
+        }
+
+        // Render Comments in Modal
+        function renderComments() {
+            const book = books.find(b => b.id === currentModalBookId);
+            const list = document.getElementById("modal-comments-list");
+            list.innerHTML = "";
+
+            if (!book.comments || book.comments.length === 0) {
+                list.innerHTML = `<p class="text-slate-500 italic text-sm">No comments yet. Be the first to start the discussion!</p>`;
+                return;
+            }
+
+            book.comments.forEach(c => {
+                list.innerHTML += `
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-slate-900 text-sm">${c.name}</span>
+                            <span class="text-xs text-slate-400">${c.time}</span>
+                        </div>
+                        <p class="text-slate-700 text-sm leading-relaxed">${c.text}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Add Comment
+        function addComment() {
+            const input = document.getElementById("new-comment-text");
+            const text = input.value.trim();
+            if (!text) return;
+
+            const book = books.find(b => b.id === currentModalBookId);
+            book.comments.push({
+                name: "You (Reader)",
+                text: text,
+                time: "Just now"
+            });
+
+            input.value = "";
+            renderComments();
+            triggerToast("Comment posted!");
+        }
+
+        // Submit New Review
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById("write-title").value.trim();
+            const author = document.getElementById("write-author").value.trim();
+            const genre = document.getElementById("write-genre").value;
+            const rating = parseFloat(document.getElementById("write-rating").value);
+            let cover = document.getElementById("write-cover").value.trim();
+            const review = document.getElementById("write-review").value.trim();
+            const pros = document.getElementById("write-pros").value.trim();
+            const cons = document.getElementById("write-cons").value.trim();
+
+            if (!cover) {
+                cover = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600";
+            }
+
+            const newBook = {
+                id: books.length + 1,
+                title: title,
+                author: author,
+                genre: genre,
+                rating: rating,
+                cover: cover,
+                reviewer: "You (Reader)",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+                snippet: review.length > 120 ? review.substring(0, 120) + "..." : review,
+                fullReview: review,
+                pros: pros || "Great pacing and concepts.",
+                cons: cons || "None mentioned.",
+                comments: []
+            };
+
+            books.unshift(newBook);
+            renderBooks();
+            toggleWriteModal(false);
+            e.target.reset();
+            triggerToast("Review published successfully!");
+            scrollToExplore();
+        }
+
+        // Newsletter Handler
+        function handleNewsletter(e) {
+            e.preventDefault();
+            triggerToast("Successfully subscribed to newsletter!");
+            e.target.reset();
+        }
+
+        // Interactive AI Matchmaker Quiz Logic
+        let matchedBookId = null;
+
+        function calculateMatch() {
+            const mood = document.querySelector('input[name="quiz_mood"]:checked');
+            const genre = document.querySelector('input[name="quiz_genre"]:checked');
+            const length = document.querySelector('input[name="quiz_length"]:checked');
+
+            if (!mood || !genre || !length) {
+                triggerToast("Please select all 3 options to find your match!");
+                return;
+            }
+
+            const selectedGenre = genre.value;
+            // Find books matching the genre, or just fallback to top rated
+            let matchCandidates = books.filter(b => b.genre === selectedGenre);
+            if (matchCandidates.length === 0) {
+                matchCandidates = books;
+            }
+
+            // Pick a matching book (or random from candidates)
+            const matchedBook = matchCandidates[Math.floor(Math.random() * matchCandidates.length)];
+            matchedBookId = matchedBook.id;
+
+            // Populate Result Container
+            document.getElementById("match-cover").src = matchedBook.cover;
+            document.getElementById("match-title").innerText = matchedBook.title;
+            document.getElementById("match-author").innerText = "by " + matchedBook.author;
+            document.getElementById("match-snippet").innerText = matchedBook.snippet;
+
+            const resultContainer = document.getElementById("quiz-result");
+            resultContainer.classList.remove("hidden");
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+            triggerToast("Match found! 🎉");
+        }
+
+        function openReviewModalFromMatch() {
+            if (matchedBookId) {
+                openReviewById(matchedBookId);
+            }
+        }
+
+        // Initial Setup
+        window.onload = () => {
+            renderBooks();
+        };
+    </script>
+</body>
+</html>
